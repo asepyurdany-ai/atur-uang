@@ -148,8 +148,8 @@ def parse_command(text: str) -> dict:
             return {"action": "error", "message": str(e)}
         return {"action": "buat", "project": project, "pool": pool, "description": desc}
 
-    # ── catat <project> <amount> <description> ──
-    # Format: catat <project_name> <amount> <desc...>
+    # ── catat <project> <amount> <description> [tanggal <date>] ──
+    # Format: catat <project_name> <amount> <desc...> [tanggal DD/MM atau DD bulan]
     m = re.match(
         r'^catat\s+(.+?)\s+' + AMOUNT_PATTERN + r'\s+(.+)$',
         body, re.IGNORECASE
@@ -157,12 +157,45 @@ def parse_command(text: str) -> dict:
     if m:
         project = m.group(1).strip()
         amount_str = m.group(2).strip()
-        desc = m.group(3).strip()
+        desc_full = m.group(3).strip()
         try:
             amount = parse_amount(amount_str)
         except ValueError as e:
             return {"action": "error", "message": str(e)}
-        return {"action": "catat", "project": project, "amount": amount, "desc": desc}
+
+        # Extract date if specified: "tanggal 2 april" or "tanggal 2/4"
+        date = None
+        date_match = re.search(
+            r'\s+tanggal\s+(\d{1,2})\s*(jan(?:uari)?|feb(?:ruari)?|mar(?:et)?|apr(?:il)?|mei|jun(?:i)?|jul(?:i)?|agu(?:stus)?|sep(?:tember)?|okt(?:ober)?|nov(?:ember)?|des(?:ember)?|\d{1,2}(?:/\d{2,4})?)',
+            desc_full, re.IGNORECASE
+        )
+        if date_match:
+            desc = desc_full[:date_match.start()].strip()
+            day = int(date_match.group(1))
+            month_str = date_match.group(2).lower()
+            MONTHS = {
+                'jan': 1, 'januari': 1, 'feb': 2, 'februari': 2,
+                'mar': 3, 'maret': 3, 'apr': 4, 'april': 4,
+                'mei': 5, 'jun': 6, 'juni': 6, 'jul': 7, 'juli': 7,
+                'agu': 8, 'agustus': 8, 'sep': 9, 'september': 9,
+                'okt': 10, 'oktober': 10, 'nov': 11, 'november': 11,
+                'des': 12, 'desember': 12,
+            }
+            from datetime import date as dt_date
+            year = dt_date.today().year
+            if month_str in MONTHS:
+                month = MONTHS[month_str]
+            else:
+                # format DD/MM or DD/MM/YYYY
+                parts = month_str.split('/')
+                month = int(parts[0])
+                if len(parts) > 1 and len(parts[1]) == 4:
+                    year = int(parts[1])
+            date = f"{year}-{month:02d}-{day:02d}"
+        else:
+            desc = desc_full
+
+        return {"action": "catat", "project": project, "amount": amount, "desc": desc, "date": date}
 
     return {"action": "unknown", "body": body}
 
@@ -217,7 +250,7 @@ def handle_command(text: str) -> str:
 
     if action == "catat":
         category = detect_category(cmd["desc"])
-        tx = add_transaction(cmd["project"], cmd["amount"], cmd["desc"], category)
+        tx = add_transaction(cmd["project"], cmd["amount"], cmd["desc"], category, date=cmd.get("date"))
         if tx is None:
             return fmt_error(f'Project "{cmd["project"]}" tidak ditemukan.')
         return fmt_catat(tx)

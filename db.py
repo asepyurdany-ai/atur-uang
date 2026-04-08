@@ -126,7 +126,7 @@ def get_project(name):
     }
 
 
-def add_transaction(project_name, amount, description, category="umum"):
+def add_transaction(project_name, amount, description, category="umum", date=None):
     conn = _conn()
     c = conn.cursor()
     row = _find_project(c, project_name)
@@ -134,10 +134,16 @@ def add_transaction(project_name, amount, description, category="umum"):
         conn.close()
         return None
     pid, pname, pool, _, _ = row
-    c.execute(
-        "INSERT INTO transactions (project_id, amount, description, category) VALUES (?, ?, ?, ?)",
-        (pid, amount, description, category)
-    )
+    if date:
+        c.execute(
+            "INSERT INTO transactions (project_id, amount, description, category, date) VALUES (?, ?, ?, ?, ?)",
+            (pid, amount, description, category, date)
+        )
+    else:
+        c.execute(
+            "INSERT INTO transactions (project_id, amount, description, category) VALUES (?, ?, ?, ?)",
+            (pid, amount, description, category)
+        )
     conn.commit()
     tx_id = c.lastrowid
     balance, _ = _get_balance(c, pid, pool)
@@ -148,6 +154,7 @@ def add_transaction(project_name, amount, description, category="umum"):
         "amount": amount,
         "description": description,
         "category": category,
+        "date": date,
         "balance": balance,
     }
 
