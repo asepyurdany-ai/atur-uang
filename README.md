@@ -9,35 +9,35 @@ No web UI. No Telegram bot. Just talk to Dexter.
 ## Cara Pakai
 
 ```
-atur buat [nama project] [modal]
-atur buat [nama] [modal] deskripsi [teks]
-atur catat [project] [nominal] [keterangan]
-atur saldo [project?]
-atur laporan [project]
-atur laporan [project] minggu ini
-atur hapus [id transaksi]
-atur list
-atur bantuan
+devi buat [nama project] [modal]
+devi buat [nama] [modal] deskripsi [teks]
+devi catat [project] [nominal] [keterangan]
+devi saldo [project?]
+devi laporan [project]
+devi laporan [project] minggu ini
+devi hapus [id transaksi]
+devi list
+devi bantuan
 ```
 
 ### Contoh
 
 ```
-atur buat warung sembako 100jt
-atur buat renovasi rumah 50jt deskripsi renovasi rumah pak asep
+devi buat warung sembako 100jt
+devi buat renovasi rumah 50jt deskripsi renovasi rumah pak asep
 
-atur catat warung 2jt beli cat tembok
-atur catat warung 500rb bayar tukang harian
-atur catat renovasi 1.5jt beli meja kayu
+devi catat warung 2jt beli cat tembok
+devi catat warung 500rb bayar tukang harian
+devi catat renovasi 1.5jt beli meja kayu
 
-atur saldo warung
-atur saldo
+devi saldo warung
+devi saldo
 
-atur laporan warung
-atur laporan warung minggu ini
+devi laporan warung
+devi laporan warung minggu ini
 
-atur hapus 5
-atur list
+devi hapus 5
+devi list
 ```
 
 ### Format Nominal
@@ -70,7 +70,7 @@ Dexter otomatis mendeteksi pesan yang diawali `atur` dan meneruskannya ke `handl
 ```python
 from atur_uang.main import handle_command, init_db
 init_db()
-response = handle_command("atur saldo warung")
+response = handle_command("devi saldo warung")
 ```
 
 ---

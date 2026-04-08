@@ -40,7 +40,7 @@ def fmt_saldo(summary):
 
 def fmt_saldo_all(projects):
     if not projects:
-        return "📊 Belum ada project. Buat dulu: atur buat [nama] [modal]"
+        return "📊 Belum ada project. Buat dulu: devi buat [nama] [modal]"
     lines = ["📊 Semua Project:"]
     for i, p in enumerate(projects, 1):
         lines.append(
@@ -92,15 +92,15 @@ def fmt_list(projects):
 def fmt_bantuan():
     return (
         "🤖 Atur Uang — Perintah:\n"
-        "   atur buat [nama project] [modal]\n"
-        "   atur buat [nama] [modal] deskripsi [teks]\n"
-        "   atur catat [project] [nominal] [keterangan]\n"
-        "   atur saldo [project?]\n"
-        "   atur laporan [project]\n"
-        "   atur laporan [project] minggu ini\n"
-        "   atur hapus [id transaksi]\n"
-        "   atur list\n"
-        "   atur bantuan\n\n"
+        "   devi buat [nama project] [modal]\n"
+        "   devi buat [nama] [modal] deskripsi [teks]\n"
+        "   devi catat [project] [nominal] [keterangan]\n"
+        "   devi saldo [project?]\n"
+        "   devi laporan [project]\n"
+        "   devi laporan [project] minggu ini\n"
+        "   devi hapus [id transaksi]\n"
+        "   devi list\n"
+        "   devi bantuan\n\n"
         "💡 Nominal: 100jt, 2jt, 500rb, 1.5jt, 50000"
     )
 

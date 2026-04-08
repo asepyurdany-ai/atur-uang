@@ -92,12 +92,12 @@ def parse_command(text: str) -> dict:
     """Parse natural language atur-uang commands."""
     text = text.strip()
 
-    # Must start with "atur"
-    if not re.match(r'^atur\b', text, re.IGNORECASE):
+    # Must start with 'devi'
+    if not re.match(r'^devi\b', text, re.IGNORECASE):
         return {"action": None}
 
-    # Strip leading "atur "
-    body = re.sub(r'^atur\s*', '', text, flags=re.IGNORECASE).strip()
+    # Strip leading "devi "
+    body = re.sub(r'^devi\s*', '', text, flags=re.IGNORECASE).strip()
 
     # ── bantuan / help ──
     if re.match(r'^(bantuan|help|\\?)$', body, re.IGNORECASE):
@@ -227,8 +227,8 @@ def handle_command(text: str) -> str:
 
     if action == "unknown":
         return fmt_error(
-            f'Perintah tidak dikenali: "atur {cmd.get("body", "")}".\n'
-            'Ketik "atur bantuan" untuk melihat daftar perintah.'
+            f'Perintah tidak dikenali: "devi {cmd.get("body", "")}".\n'
+            'Ketik "devi bantuan" untuk melihat daftar perintah.'
         )
 
     return fmt_error("Perintah tidak dikenali.")
@@ -247,14 +247,14 @@ if __name__ == "__main__":
 
     # Test suite
     tests = [
-        "atur buat warung sembako 100jt",
-        "atur catat warung 2jt beli cat tembok",
-        "atur catat warung 500rb bayar tukang harian",
-        "atur catat warung 1.5jt beli meja kayu",
-        "atur saldo warung",
-        "atur laporan warung",
-        "atur list",
-        "atur bantuan",
+        "devi buat warung sembako 100jt",
+        "devi catat warung 2jt beli cat tembok",
+        "devi catat warung 500rb bayar tukang harian",
+        "devi catat warung 1.5jt beli meja kayu",
+        "devi saldo warung",
+        "devi laporan warung",
+        "devi list",
+        "devi bantuan",
     ]
     for cmd in tests:
         print(f"\n>>> {cmd}")
