@@ -51,7 +51,14 @@ def fmt_saldo_all(projects):
 
 def fmt_laporan(data):
     txs = data["transactions"]
-    lines = [f'📋 Laporan {data["project_name"].title()}']
+    lines = [
+        f'📋 Laporan {data["project_name"].title()}',
+        f'   Pool  : {fmt_rp(data["pool"])}',
+        f'   {"─"*50}',
+        f'   {"No":<4} {"Tgl":<8} {"Nominal":>14}  Keterangan',
+        f'   {"─"*50}',
+    ]
+    no = 1
     if not txs:
         lines.append("   (belum ada transaksi)")
     for tx in txs:
@@ -62,10 +69,12 @@ def fmt_laporan(data):
             date_str = d.strftime("%d %b")
         except Exception:
             date_str = tx["date"]
-        lines.append(f'   {date_str}: {fmt_rp(tx["amount"])} — {tx["description"]} [{tx["category"]}]')
+        lines.append(f'   {no:>2}. {date_str}  {fmt_rp(tx["amount"]):>14}  {tx["description"]}')
+        no += 1
     total = sum(t["amount"] for t in txs)
-    lines.append(f'   {"─"*25}')
-    lines.append(f'   Total: {fmt_rp(total)} dari {fmt_rp(data["pool"])}')
+    lines.append(f'   {"─"*50}')
+    lines.append(f'   Total keluar : {fmt_rp(total)}')
+    lines.append(f'   Sisa modal   : {fmt_rp(data["pool"] - total)}')
     return "\n".join(lines)
 
 
